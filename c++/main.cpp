@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 
 
@@ -31,6 +32,35 @@ struct Node *findLCA(struct Node* root, int n1, int n2){
     return (left_lca != NULL)? left_lca: right_lca;
 }
 
+std::string ascii_tree_rec(std::string &prefix, 
+			std::string &trunk,
+			struct Node* root){
+	
+	if (root == NULL){
+		trunk += + "-X\n" + prefix;
+		return trunk;
+	}
+
+	trunk += "-" + std::to_string(root->key);
+
+	std::string new_prefix = prefix + " |";
+	trunk = ascii_tree_rec(	new_prefix,
+				trunk,
+				(root->right));
+
+	trunk += "\n" + prefix + " ";
+	
+	trunk = ascii_tree_rec(	prefix,
+				trunk,
+				root->left);
+	return trunk;
+}
+std::string ascii_tree(struct Node * root){
+	std::string drawing{""};
+	std::string prefix{};
+	return ascii_tree_rec(prefix,drawing, root);
+}
+
 
 int main(){
 
@@ -44,6 +74,10 @@ int main(){
     std::cout << "LCA(4, 5) = " << findLCA(root, 4, 5)->key;
     std::cout << "\nLCA(4, 6) = " << findLCA(root, 4, 6)->key;
     std::cout << "\nLCA(3, 4) = " << findLCA(root, 3, 4)->key; 
-    std::cout << "\nLCA(2, 4) = " << findLCA(root, 2, 4)->key; 
+    std::cout << "\nLCA(2, 4) = " << findLCA(root, 2, 4)->key << std::endl; 
 
+    std::cout << ascii_tree(root);
 }
+
+
+
