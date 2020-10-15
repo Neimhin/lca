@@ -10,14 +10,14 @@
 
 int main(){
 
-    Node* root = newNode(1);
-    root->left = newNode(2);
-    root->right = newNode(3);
-    root->left->left = newNode(4);
-    root->left->right = newNode(5);
-    root->right->left = newNode(6);
+    Node* root = newNode(2323);
+    root->left = newNode(255433453);
+    root->right = newNode(343);
+    root->left->left = newNode(7484);
+    root->left->right = newNode(3453445);
+    root->right->left = newNode(346);
     root->right->right = newNode(7); 
-    root->right->right->left = newNode(8);
+    root->right->right->left = newNode(8345);
 
     std::cout << ascii_tree(root);
 
