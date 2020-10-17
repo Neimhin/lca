@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -19,12 +18,13 @@ int main(){
     root->right->right = newNode(7); 
     root->right->right->left = newNode(8345);
 
-    std::cout << ascii_tree(root);
+    std::string draw_tree = ascii_tree(root);
+    std::cout << draw_tree;
 
-    std::cout << "LCA(4, 5) = " << findLCA(root, 4, 5)->key;
-    std::cout << "\nLCA(4, 6) = " << findLCA(root, 4, 6)->key;
-    std::cout << "\nLCA(3, 4) = " << findLCA(root, 3, 4)->key; 
-    std::cout << "\nLCA(2, 4) = " << findLCA(root, 2, 4)->key << std::endl; 
+    std::cout << "LCA(346, 8345) = " << findLCA(root, 346, 8345)->key;
+    std::cout << "\nLCA(7, 343) " << findLCA(root, 7, 343)->key;
+    std::cout << "\nLCA(2323, 7484) = " << findLCA(root, 2323, 7484)->key; 
+    std::cout << "\nLCA(7, 346) = " << findLCA(root, 7, 346)->key << std::endl; 
 
 }
 
