@@ -2,7 +2,7 @@
 #define CATCH_CONFIG_MAIN
 #include "C:\Users\Hp\home\catch.hpp"
 #include <string>
-
+#include <iostream>
 #include "lca.h"
 #include "node.h"
 #include "draw.h"
@@ -78,21 +78,25 @@ TEST_CASE ( "lowest common ancestors are computed", "[lca]"){
   };
 
   std::string draw_tree = ascii_tree(root);
+  std::cout << draw_tree;
   
-  
-  //std::string path1 = "expected-ascii-tree";
-  //std::string path2 = "ascii-tree";
-  //std::ofstream expected_out(path1);
-  //expected_out << expected_draw_tree;
+  std::string path1 = "expected-ascii-tree";
+  std::string path2 = "ascii-tree";
+  std::ofstream expected_out(path1);
+  expected_out << expected_draw_tree;
 
-  //std::ofstream actual_out(path2);
-  //actual_out << draw_tree;
+  std::ofstream actual_out(path2);
+  actual_out << draw_tree;
   
   REQUIRE (findLCA( root, 1, 1 )->key == 1 );
 
   REQUIRE (findLCA ( root, 20, 300)->key == 1 );
 
-  //CHECK ( draw_tree.compare(expected_draw_tree) == 0 ); 
+  CHECK ( draw_tree.compare(expected_draw_tree) == 0 );
+
+  std::string t1{"abc\n"};
+  std::string t2{"abc\n"};
+  CHECK ( t1.compare(t2) == 0 ); 
   
   //REQUIRE ( compareFiles(path1,path2) == 0 );
 }
