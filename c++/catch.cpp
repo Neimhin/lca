@@ -1,6 +1,8 @@
 
 #define CATCH_CONFIG_MAIN
-#include "C:\Users\Hp\home\catch.hpp"
+#include "catch.hpp"
+
+#include "catch.hpp"
 #include <string>
 #include <iostream>
 #include "lca.h"
