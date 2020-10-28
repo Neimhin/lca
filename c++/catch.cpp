@@ -1,6 +1,6 @@
 
 #define CATCH_CONFIG_MAIN
-#include "C:\Users\Hp\home\catch.hpp"
+#include "catch.hpp"
 #include <string>
 #include <iostream>
 #include "lca.h"
@@ -60,25 +60,38 @@ TEST_CASE ( "lowest common ancestors are computed", "[lca]"){
   
   std::string expected_draw_tree{
     "-1-300-7000000-?\n" 
-    " | |   |\n"         
+    " | |   |       \n"         
     " | |   ?\n"         
-    " | |\n"             
+    " | |   \n"             
     " | 600000-?\n"
-    " | |\n"
+    " | |      \n"
     " | ?\n"
-    " |\n"
+    " | \n"
     " 20-50000-?\n"
-    " |  |\n"
+    " |  |     \n"
     " |  ?\n"
-    " |\n"
+    " |  \n"
     " 4000-?\n"
-    " |\n"
+    " |    \n"
     " ?\n"
     " "
   };
 
+
+
+  std::stringstream expected_stream;
+  expected_stream << expected_draw_tree;
+
   std::string draw_tree = ascii_tree(root);
-  std::cout << draw_tree;
+  std::cout << draw_tree << std::endl;
+
+  std::stringstream actual_stream;
+  actual_stream << draw_tree;
+  
+  std::string expected_line;
+  std::string actual_line;
+
+  
   
   std::string path1 = "expected-ascii-tree";
   std::string path2 = "ascii-tree";
@@ -97,6 +110,26 @@ TEST_CASE ( "lowest common ancestors are computed", "[lca]"){
   std::string t1{"abc\n"};
   std::string t2{"abc\n"};
   CHECK ( t1.compare(t2) == 0 ); 
+
+  char expected;
+  char actual;
+  while(expected_stream.get(expected) && actual_stream.get(actual)){
+     CHECK (expected == actual);
+    std::cout << expected;
+  }
+  std::cout << std::endl << "exepected " << expected << " but got " << actual << std::endl;
   
+
+  REQUIRE ( ! expected_stream.get(expected));
+  REQUIRE ( ! actual_stream.get(actual));
+
+
+  Node* root2 = newNode(1);
+  root2->left = newNode(2);
+  root2->right = root2->left;
+  
+
+  REQUIRE ( findLCA( root2, 1, 2)->key == 1 );
+
   //REQUIRE ( compareFiles(path1,path2) == 0 );
 }

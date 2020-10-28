@@ -20,6 +20,7 @@ std::string ascii_tree(struct Node * root){
 	std::string prefix{" "};
 	return ascii_tree_rec(prefix,drawing,RIGHT, root);
 }
+
 std::string ascii_tree_rec(std::string &prefix, 
 			std::string &trunk,
             int context,
