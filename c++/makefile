@@ -1,3 +1,7 @@
+CC=g++
 
-make-test: node.cpp draw.cpp lca.cpp catch.cpp
-		g++ -o test-suite draw.cpp lca.cpp catch.cpp node.cpp -I.
+prog: main.cpp DAG.cpp Node.cpp
+	$(CC) -o prog -Wall -Wextra -pedantic Node.cpp DAG.cpp main.cpp -I.
+
+testsuite: catch.cpp DAG.cpp Node.cpp
+	$(CC) -o testsuite -Wall -Wextra -pedantic Node.cpp DAG.cpp catch.cpp -I.

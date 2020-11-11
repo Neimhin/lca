@@ -3,133 +3,71 @@
 #include "catch.hpp"
 #include <string>
 #include <iostream>
-#include "lca.h"
-#include "node.h"
-#include "draw.h"
-
-#include <fstream>
-#include <iterator>
 #include <algorithm>
 
-bool compareFiles(const std::string& p1, const std::string& p2) {
-  std::ifstream f1(p1,
-		   std::ifstream::binary|std::ifstream::ate);
-  std::ifstream f2(p2,
-		   std::ifstream::binary|std::ifstream::ate);
 
-  if (f1.fail() || f2.fail()) {
-    return false; //file problem
+#include "DAG.h"
+
+bool vectorHasInt(int i, std::vector<int>* v);
+
+TEST_CASE ( "lowest common ancestors in a directed acyclic graph are computed", "[lca-dag]"){
+
+  DAG* myDag = new DAG;
+
+
+  REQUIRE( myDag->getNode(0) == nullptr);
+
+  myDag->addEdge(1, 2);
+  myDag->addEdge(2, 3);
+  myDag->addEdge(3, 4);
+  myDag->addEdge(-4,4);
+  myDag->addEdge(-3,-4);
+  myDag->addEdge(3, 5);
+  myDag->addEdge(7, 4);
+  myDag->addEdge(7, 5);
+  myDag->addEdge(7, 6);
+  myDag->addEdge(8, 5);
+  myDag->addEdge(8, 6);
+  myDag->addEdge(9, 5);
+  myDag->addEdge(9, 6);
+
+  REQUIRE( myDag->getNode(1)->index == 1 );
+
+  REQUIRE( myDag->getNode(-4)->index == -4 ); 
+  REQUIRE( myDag->getNode(0) == nullptr);
+
+  std::vector<Node*>* lca_3_2 = myDag->lca(3, 2);
+
+  std::vector<int>* lca_3_2_answer = new std::vector<int>;
+  lca_3_2_answer->push_back(2);
+  
+  for(Node* n : *lca_3_2){
+    REQUIRE( vectorHasInt(n->index, lca_3_2_answer));
   }
+  delete lca_3_2;
+  delete lca_3_2_answer;
+  
+  REQUIRE( myDag->lca(3, 0)->size() == 0);
 
-  if (f1.tellg() != f2.tellg()) {
-    return false; //size mismatch
+  std::vector<int>* lca_5_6_answer = new std::vector<int>;
+  lca_5_6_answer->push_back(7);
+  lca_5_6_answer->push_back(8);
+  lca_5_6_answer->push_back(9);
+
+  std::vector<Node*>* lca_5_6 = myDag->lca(5,6);
+  
+  for(Node * n : *lca_5_6){
+    CHECK( vectorHasInt(n->index, lca_5_6_answer));
   }
-
-  //seek back to beginning and use std::equal to compare contents
-  f1.seekg(0, std::ifstream::beg);
-  f2.seekg(0, std::ifstream::beg);
-  return
-    std::equal(std::istreambuf_iterator<char>(f1.rdbuf()),
-               std::istreambuf_iterator<char>(),
-               std::istreambuf_iterator<char>(f2.rdbuf()));
 }
 
-/*
-unsigned int factorial(unsigned int n){
-  return n > 1 ? factorial(n-1)*n : 1;
-}
-
-TEST_CASE ( "factorials are computed", "[factorial]"){
-  REQUIRE ( factorial(0) == 1 );
-  REQUIRE ( factorial(1) == 1 );
-  REQUIRE ( factorial(3) == 6 );
-  REQUIRE ( factorial(4) == 24 );
-}
-*/
-
-TEST_CASE ( "lowest common ancestors are computed", "[lca]"){
-
-  Node* root = newNode(1);
-  root->left = newNode(20);
-  root->right = newNode(300);
-  root->left->left = newNode(4000);
-  root->left->right = newNode(50000);
-  root->right->left = newNode(600000);
-  root->right->right = newNode(7000000);
-
-  
-  std::string expected_draw_tree{
-    "-1-300-7000000-?\n" 
-    " | |   |       \n"         
-    " | |   ?\n"         
-    " | |   \n"             
-    " | 600000-?\n"
-    " | |      \n"
-    " | ?\n"
-    " | \n"
-    " 20-50000-?\n"
-    " |  |     \n"
-    " |  ?\n"
-    " |  \n"
-    " 4000-?\n"
-    " |    \n"
-    " ?\n"
-    " "
-  };
 
 
-
-  std::stringstream expected_stream;
-  expected_stream << expected_draw_tree;
-
-  std::string draw_tree = ascii_tree(root);
-  std::cout << draw_tree << std::endl;
-
-  std::stringstream actual_stream;
-  actual_stream << draw_tree;
-  
-  std::string expected_line;
-  std::string actual_line;
-
-  
-  
-  std::string path1 = "expected-ascii-tree";
-  std::string path2 = "ascii-tree";
-  std::ofstream expected_out(path1);
-  expected_out << expected_draw_tree;
-
-  std::ofstream actual_out(path2);
-  actual_out << draw_tree;
-  
-  REQUIRE (findLCA( root, 1, 1 )->key == 1 );
-
-  REQUIRE (findLCA ( root, 20, 300)->key == 1 );
-
-  CHECK ( draw_tree.compare(expected_draw_tree) == 0 );
-
-  std::string t1{"abc\n"};
-  std::string t2{"abc\n"};
-  CHECK ( t1.compare(t2) == 0 ); 
-
-  char expected;
-  char actual;
-  while(expected_stream.get(expected) && actual_stream.get(actual)){
-     CHECK (expected == actual);
-    std::cout << expected;
+bool vectorHasInt(int i, std::vector<int>* v){
+  auto location = std::find(v->begin(), v->end(),i);
+  if(location == v->end()){
+    return false;
   }
-  std::cout << std::endl << "exepected " << expected << " but got " << actual << std::endl;
-  
+  return true;
 
-  REQUIRE ( ! expected_stream.get(expected));
-  REQUIRE ( ! actual_stream.get(actual));
-
-
-  Node* root2 = newNode(1);
-  root2->left = newNode(2);
-  root2->right = root2->left;
-  
-
-  REQUIRE ( findLCA( root2, 1, 2)->key == 1 );
-
-  //REQUIRE ( compareFiles(path1,path2) == 0 );
 }

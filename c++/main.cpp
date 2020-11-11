@@ -1,32 +1,47 @@
+
+#include "DAG.h"
 #include <iostream>
-#include <vector>
-#include <string>
 
-#include "lca.h"
-#include "node.h"
-#include "draw.h"
-
+void printNodeVector(std::vector<Node*>* v);
 
 int main(){
 
-    Node* root = newNode(2323);
-    root->left = newNode(255433453);
-    root->right = newNode(343);
-    root->left->left = newNode(7484);
-    root->left->right = newNode(3453445);
-    root->right->left = newNode(346);
-    root->right->right = newNode(7); 
-    root->right->right->left = newNode(8345);
+  DAG* myDag = new DAG;
 
-    std::string draw_tree = ascii_tree(root);
-    std::cout << draw_tree;
+  if(myDag != nullptr){
+    std::cout << "myDag exists" << std::endl; 
+  }
 
-    std::cout << "LCA(346, 8345) = " << findLCA(root, 346, 8345)->key;
-    std::cout << "\nLCA(7, 343) " << findLCA(root, 7, 343)->key;
-    std::cout << "\nLCA(2323, 7484) = " << findLCA(root, 2323, 7484)->key; 
-    std::cout << "\nLCA(7, 346) = " << findLCA(root, 7, 346)->key << std::endl; 
+  myDag->addEdge(1, 2);
+  myDag->addEdge(2, 3);
+  myDag->addEdge(3, 4);
+  myDag->addEdge(-4, 4);
+  myDag->addEdge(-3, -4);
+  myDag->addEdge(3, 5);
+  myDag->addEdge(7, 4);
+  myDag->addEdge(7, 5);
 
+  printNodeVector(myDag->roots);
+  printNodeVector(myDag->getAncestors(4));
+  
+  std::vector<Node*>* lcas = myDag->lca(5, 4);
+
+  printNodeVector(lcas);
+
+  lcas = myDag->lca(5, 0);
+
+  printNodeVector(lcas);
+
+  lcas = myDag->lca(5, 1);
+
+  printNodeVector(lcas);
 }
 
 
 
+void printNodeVector(std::vector<Node*>* v){
+  for(Node* n : *v){
+    std::cout << n->index << " ";
+  }
+  std::cout << std::endl;
+}
