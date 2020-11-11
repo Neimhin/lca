@@ -16,7 +16,7 @@ class DAG {
     
     std::vector<Node*>* getAncestors(int index);
 
-    int* lca(int index1, int index2);
+    std::vector<Node*>* lca(int i1, int i2);
   
   private:
     void getAncestorsRecursive(Node* node, std::vector<Node*>* ancestors);
@@ -25,7 +25,10 @@ class DAG {
 
     std::vector<Node*>* getCommon(std::vector<Node*>* ancestors1, std::vector<Node*>* ancestors2);
     
-    std::vector<Node*>* lca(int i1, int i2);
+
+    unsigned int heightToLowest(unsigned int height, Node * node,  std::vector<Node*>* ancestors);
+
+    void getNodesAtHeight(unsigned int height, Node * node, std::vector<Node*>* commonAncestors, std::vector<Node*>* lcas);
 
 };
 

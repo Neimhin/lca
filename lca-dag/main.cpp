@@ -17,10 +17,24 @@ int main(){
   myDag->addEdge(3, 4);
   myDag->addEdge(-4, 4);
   myDag->addEdge(-3, -4);
+  myDag->addEdge(3, 5);
+  myDag->addEdge(7, 4);
+  myDag->addEdge(7, 5);
 
   printNodeVector(myDag->roots);
   printNodeVector(myDag->getAncestors(4));
+  
+  std::vector<Node*>* lcas = myDag->lca(5, 4);
 
+  printNodeVector(lcas);
+
+  lcas = myDag->lca(5, 0);
+
+  printNodeVector(lcas);
+
+  lcas = myDag->lca(5, 1);
+
+  printNodeVector(lcas);
 }
 
 
