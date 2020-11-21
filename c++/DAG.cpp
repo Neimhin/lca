@@ -135,8 +135,6 @@ bool DAG::vectorHasNode(Node* node, std::vector<Node*>* v){
 
 bool DAG::addEdge(int index1, int index2){
   
-  std::cout << "making edge " << index1 << " " << index2;  
-
   Node* parent = getNode(index1);
   Node* child = getNode(index2);
   
@@ -159,8 +157,6 @@ bool DAG::addEdge(int index1, int index2){
   parent->addChild(child);
   child->addParent(parent);
  
-  std::cout << " done" << std::endl;
-
   return true;
 }
 
